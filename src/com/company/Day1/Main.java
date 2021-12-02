@@ -1,7 +1,9 @@
 package com.company.Day1;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -64,22 +66,35 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        try(Scanner scanner = new Scanner(Path.of("one.txt"))) {
-            int first = Integer.parseInt(scanner.nextLine());
-            int counter = 0;
-            int lines = 0;
-            System.out.println(first);
-            while (scanner.hasNextLine()) {
-                lines++;
-                int holder = Integer.parseInt(scanner.nextLine());
-                if(holder > first) {
-                    counter++;
-                }
-                first = holder;
-            }
-            System.out.println(counter);
-            System.out.println("Lines " + lines);
+        ArrayList<Integer> data = new ArrayList<>();
+        File text = new File("two.txt");
+        Scanner input = new Scanner(text);
+        while(input.hasNextLine()) {
+            data.add(Integer.parseInt(input.nextLine()));
         }
+
+        //solution for problem one
+        int result = 0;
+        for(int i = 1; i < data.size(); i++) {
+            if(data.get(i) > data.get(i - 1))
+                result++;
+        }
+        System.out.println("Problem one answer :: " + result);
+
+        //solution for problem two
+        result = 0;
+        int prevSum = 0;
+        for(int i = 2; i < data.size(); i++) {
+            int sum = data.get(i - 2) + data.get(i - 1) + data.get(i);
+            if(prevSum != 0)
+                if(sum > prevSum)
+
+                    result++;
+            prevSum = sum;
+            System.out.println("NEW SUM :: " + prevSum );
+
+        }
+        System.out.println("Problem two answer :: " + result);
 
 
     }
