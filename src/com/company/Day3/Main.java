@@ -1,10 +1,9 @@
 package com.company.Day3;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.security.KeyStore;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * --- Day 3: Binary Diagnostic ---
@@ -43,6 +42,94 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+//        partOne();
+         partTwo();
+//          3351 * 851
+//        System.out.println("----------");
+        partTwoOfTwo();
+
+
+    }
+
+    private static void partTwoOfTwo() throws IOException {
+        List<String> list = new ArrayList<>();
+        Scanner scanner = new Scanner(Path.of("third.txt"));
+        while (scanner.hasNextLine()) {
+            list.add(scanner.nextLine());
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("0");
+        AtomicInteger ones = new AtomicInteger();
+        AtomicInteger twos = new AtomicInteger();
+        while(list.size() > 1) {
+            list.forEach(e -> {
+                if (e.startsWith(stringBuilder.toString())) {
+                    ones.getAndIncrement();
+                } else {
+                    twos.getAndIncrement();
+                }
+            });
+            if(ones.get() == twos.get()) {
+                stringBuilder.append("0");
+            } else if(ones.get() > twos.get()) {
+                stringBuilder.append("0");
+            } else {
+                stringBuilder.append("1");
+            }
+            ones.set(0);
+            twos.set(0);
+
+            list.removeIf(e -> !e.startsWith(stringBuilder.toString()));
+        }
+
+        System.out.println(Integer.parseInt(list.get(0), 2));
+    }
+
+
+
+
+    private static void partTwo() throws IOException {
+        List<String> list = new ArrayList<>();
+        Scanner scanner = new Scanner(Path.of("third.txt"));
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("0");
+        while (scanner.hasNextLine()) {
+            list.add(scanner.nextLine());
+
+        }
+        int ones = 0;
+        int zero = 0;
+
+        while (list.size() != 1) {
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = 0; j < list.get(i).length(); j++) {
+                    if (list.get(i).startsWith(String.valueOf(stringBuilder))) {
+                        ones++;
+                    } else {
+                        zero++;
+                    }
+                }
+                if (ones == zero || ones > zero) {
+                    stringBuilder.append("1");
+                } else {
+                    stringBuilder.append("0");
+                }
+                ones = 0;
+                zero = 0;
+                list.removeIf(e -> !e.startsWith(String.valueOf(stringBuilder)));
+
+            }
+
+        }
+        System.out.println(Integer.parseInt(list.get(0), 2));
+        System.out.println("-------------------");
+        // 4094
+
+        list.forEach(System.out::println);
+
+    }
+
+    private static void partOne() throws IOException {
         Map<Integer, Integer> list = new HashMap<>();
         Scanner scanner = new Scanner(Path.of("third.txt"));
         while (scanner.hasNextLine()) {
@@ -61,7 +148,7 @@ public class Main {
 
         StringBuilder stringBuilder = new StringBuilder();
         list.forEach((key, value) -> {
-            if (value > 500) {
+            if (value > list.size()) {
                 stringBuilder.append("1");
             } else {
                 stringBuilder.append("0");
@@ -70,20 +157,14 @@ public class Main {
 
         StringBuilder stringBuilderOne = new StringBuilder();
         list.forEach((key, value) -> {
-            if (value < 500) {
+            if (value < list.size()) {
                 stringBuilderOne.append("1");
             } else {
                 stringBuilderOne.append("0");
             }
         });
-        System.out.println(Integer.parseInt(stringBuilder.toString(),2)*Integer.parseInt(stringBuilderOne.toString(),2));
-}
-
-
-//        int decimal=Integer.parseInt(stringBuilder.toString(),2);
-//        System.out.println(decimal);
-//        int decimalNull=Integer.parseInt(stringBuilderNull.toString(),2);
-//        System.out.println(decimalNull);
+        System.out.println(Integer.parseInt(stringBuilder.toString(), 2) * Integer.parseInt(stringBuilderOne.toString(), 2));
+    }
 
 
 }
